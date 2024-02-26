@@ -1,0 +1,431 @@
+name: crowdstrike
+priority: 10
+transformations:
+
+## Droping logsources not supported in CrowdStrike
+  - id: cs_drop_unsupported_logsource_sysmon_status
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: sysmon_status
+  - id: cs_drop_unsupported_logsource_raw_access_thread
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: raw_access_thread
+  - id: cs_drop_unsupported_logsource_process_tampering
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: process_tampering
+  - id: cs_drop_unsupported_logsource_process_access
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: process_access
+  - id: cs_drop_unsupported_logsource_ps_classic_start
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: ps_classic_start
+  - id: cs_drop_unsupported_logsource_ps_module
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: ps_module
+  - id: cs_drop_unsupported_logsource_ps_script
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: ps_script
+  - id: cs_drop_unsupported_logsource_pipe_created
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: pipe_created
+  - id: cs_drop_unsupported_logsource_driver_load
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: driver_load
+  - id: cs_drop_unsupported_logsource_create_stream_hash
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: create_stream_hash
+  - id: cs_drop_unsupported_logsource_create_remote_thread
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: create_remote_thread
+  - id: cs_drop_unsupported_logsource_application
+    type: rule_failure
+    message: CrowdStrike logs do not support this log source at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        service: application
+
+
+#### INDEX AND OS ASSIGNMENTS
+  - id: crowdstrike_index
+    type: add_condition
+    conditions:
+      index: "<YOUR INDEX HERE>"
+    rule_conditions:
+      - type: logsource
+        product: windows
+
+#### FIELDNAME MAPPINGS
+## This reads top to bottom - so specific mappings are on top and generic mappings are on bottom
+  - id: cs_drop_eventid
+    type: detection_item_failure
+    message: CrowdStrike logs do not support the field EventID at this time.
+    field_name_conditions:
+      - type: include_fields
+        fields:
+          - EventID
+    rule_conditions:
+      - type: logsource
+        product: windows
+  # Registry Add field mappings
+  - id: cs_reg_add_fieldmapping
+    type: field_name_mapping
+    mapping:
+      Image: RegStringValue
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: registry_add
+  # Registry Set field mappings (AFAIK there is no OR function for reg_set OR reg_add but it maybe accepts a list?)
+  - id: cs_reg_add_fieldmapping
+    type: field_name_mapping
+    mapping:
+      Image: RegStringValue
+    rule_conditions:
+      - type: logsource       
+        product: windows
+        category: registry_set
+  # Network Connection field mappings
+  # Some things to note here. CrowdStrike seperates Connect and Recieve into different events.
+  # Sigma denotes this with the initited field and this can be detected in a rule condition type and this is handled 
+  # further down in this pipeline.
+  - id: cs_net_fieldmapping
+    type: field_name_mapping
+    mapping:
+      Image: ContextBaseFileName
+      ProcessId: ContextProcessId
+      DestinationIp: RemoteAddressIP4
+      DestinationPort: RemotePort
+    rule_conditions:
+      - type: logsource      
+        product: windows
+        category: network_connection
+  - id: cs_net_drop_destinationhostname
+    type: detection_item_failure
+    message: CrowdStrike logs do not support destinationhostname fields at this time.
+    field_name_conditions:
+      - type: include_fields
+        fields:
+          - DestinationHostname
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: network_connection
+  # For file Access and Delete you need to drop "Image" fields because CrowdStrike does not capture that in this event. 
+  # You need to subsearch instead which could be done in this pipeline but would require a bit of effort.
+  - id: cs_file_access_drop_image
+    type: detection_item_failure
+    message: CrowdStrike logs do not support the field Image in file access events at this time.
+    field_name_conditions:
+      - type: include_fields
+        fields:
+          - Image
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: file_access
+  - id: cs_file_delete_drop_image
+    type: detection_item_failure
+    message: CrowdStrike logs do not support the field Image in file delete events at this time.
+    field_name_conditions:
+      - type: include_fields
+        fields:
+          - Image
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: file_delete
+  - id: cs_wmi_event_fieldmapping
+    type: field_name_mapping
+    mapping:
+      Destination: CommandLine
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: wmi_event
+  # This mapping is not a 1:1 with sysmon because CrowdStrike will filter what for only what they call an important image
+  # There is likely to be a lot of overlap in detections with this mapping.
+  - id: cs_image_loaded_fieldmapping
+    type: field_name_mapping
+    mapping:
+      Image: TargetImageFileName
+      ImageLoaded: ImageFileName
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: image_loaded
+  - id: cs_file_event_fieldmapping
+    type: field_name_mapping
+    mapping:
+      Image: ContextImageFileName
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: file_event
+
+
+#### LOGSOURCE TO SOURCETYPE CONVERSIONS
+## This is faster than using event_simpleName due to sourcetype being accelerated
+ # Sourcetype conversions
+  - id: cs_process_creation_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: 
+        - "ProcessRollup2V*"
+        - "SyntheticProcessRollup2V*"
+    rule_conditions:
+      - type: logsource
+        category: process_creation
+  - id: cs_task_scheduler_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "ScheduledTaskRegisteredV*"
+    rule_conditions:
+      - type: logsource
+        category: taskscheduler
+  - id: cs_task_failed_logon_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "UserLogonFailed2V*"
+    rule_conditions:
+      - type: logsource
+        category: failed_logon
+  - id: cs_reg_add_eventtype
+    type: add_condition
+    conditions:
+      sourcetype:
+        - "AsepValueUpdateV*"
+        - "RegSystemConfigValueUpdateV*"
+        - "RegGenericValueUpdateV*"
+      RegOperationType: 1
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: registry_add
+  - id: cs_reg_add_eventtype
+    type: add_condition
+    conditions:
+      sourcetype:
+        - "AsepValueUpdateV*"
+        - "RegSystemConfigValueUpdateV*"
+        - "RegGenericValueUpdateV*"
+      RegOperationType: 1
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: registry_set
+  - id: cs_dns_query_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "DnsRequest*"
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: dns_query
+  - id: cs_network_connection_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "NetworkConnectionIP4V*"
+    rule_conditions:
+      - type: logsource
+        category: network_connection
+        product: windows
+    field_name_conditions:
+      - type: include_fields
+        fields: "Initiated"
+  - id: cs_network_receive_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "NetworkReceiveAcceptIP4V*"
+    rule_conditions:
+      - type: logsource
+        category: network_connection
+        product: windows
+    field_name_conditions:
+      - type: include_fields
+        fields: "Initiated"
+    field_name_cond_not: True 
+  - id: cs_wmi_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "WmiCreateProcessV*"
+    rule_conditions:
+      - type: logsource
+        category: wmi_event
+  - id: cs_image_load_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "ClassifiedModuleLoadV*"
+    rule_conditions:
+      - type: logsource
+        category: image_load
+        product: windows
+  - id: cs_file_access_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "FileOpenInfoV*"
+    rule_conditions:
+      - type: logsource
+        category: file_open
+        product: windows
+  - id: cs_file_delete_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "FileDeleteInfoV*"
+    rule_conditions:
+      - type: logsource
+        category: file_delete
+        product: windows
+  - id: cs_file_create_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "*FileWrittenV*"
+    rule_conditions:
+      - type: logsource
+        category: file_event
+        product: windows
+  - id: cs_file_rename_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "*FileWrittenV*"
+    rule_conditions:
+      - type: logsource
+        category: file_rename
+        product: windows
+
+
+# Generic Fieldname Mapping for all log sources
+  - id: generic_mapping
+    type: field_name_mapping
+    mapping:
+      ComputerName: host
+      TargetObject: RegObjectName
+      Image: ImageFileName
+      ParentImage: ParentBaseFileName
+      Command: TaskExecCommand
+      Arguments: TaskExecArguments
+      DestinationIp: RemoteAddressIP4
+      DestinationPort: RemotePort
+      QueryName: DomainName
+      QueryResults: IP4Records
+      SHA256: SHA256HashData
+      MD5: MD5HashData
+      ProcessId: RawProcessId
+      FileName: TargetFileName
+      SourceFilename: OriginalFilename
+      User: UserSid
+    rule_conditions:
+      - type: logsource
+        product: windows
+        
+
+  #### FIELD MODIFICATIONS
+  # Remove the EventType: CreateKey field as it isn't used in CrowdStrike logs
+  # not sure if this one is correct in yaml
+  - id: cs_reg_add_field_removal
+    type: drop_detection_item
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: registry_add
+    field_name_conditions:
+      - type: include_fields
+        fields: "EventType"
+  #  Regex cleaning
+  - id: cs_parentbasefilename_mod_imagefilename
+    type: replace_string
+    regex: "\\\\"
+    replacement: "\\\\\\\\\\\\"
+    rule_conditions:
+      - type: logsource
+        product: windows
+    field_name_conditions:
+      - type: include_fields
+        fields: "ImageFileName"
+  - id: cs_parentbasefilename_mod_imagefilename
+    type: replace_string
+    regex: "\\\\"
+    replacement: "\\\\\\\\\\\\"
+    rule_conditions:
+      - type: logsource
+        product: windows
+    field_name_conditions:
+      - type: include_fields
+        fields: "ImageFileName"
+  # Extracting file names from whole paths
+  - id: cs_parentbasefilename_replace_path_by_filename
+    type: replace_string
+    # changed \* to \\* as python throws errors
+    regex: "^(\\*)?(?:[^\\\\|\/])?.+(?=\\\\|\/)(?:\\\\|\/)(.*)$"
+    replacement: "\\2"
+    rule_conditions:
+      - type: logsource
+        category: dns_query
+        product: windows
+  - id: cs_parentbasefilename_executable_only
+    type: replace_string
+    regex: "^\\*\\\\([^\\\\]+)$"
+    replacement: "\\1"
+    rule_conditions:
+      - type: logsource
+        product: windows
+    field_name_conditions:
+      - type: include_fields
+        fields: "ParentBaseFileName"
+
+postprocessing:
+- type: template
+  template: |+
+    [{{ rule.title }}]
+    search = {{ query }} | eval rule="{{ rule.id }}", title="{{ rule.title }}" | collect index=notable_events addinfo=True source="{{ rule.id }}"
+    description = "{{ rule.description | replace('\n', ' ') }}"
+finalizers:
+- type: concat
+  prefix: |
+    [default]
+    cron_schedule = */15 * * * *
+    dispatch.earliest_time = -20m@m
+    dispatch.latest_time = -5m@m
