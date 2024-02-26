@@ -221,22 +221,22 @@ transformations:
     type: add_condition
     conditions:
       sourcetype: 
-        - "ProcessRollup2V*"
-        - "SyntheticProcessRollup2V*"
+        - "ProcessRollup2v*"
+        - "SyntheticProcessRollup2v*"
     rule_conditions:
       - type: logsource
         category: process_creation
   - id: cs_task_scheduler_eventtype
     type: add_condition
     conditions:
-      sourcetype: "ScheduledTaskRegisteredV*"
+      sourcetype: "ScheduledTaskRegisteredv*"
     rule_conditions:
       - type: logsource
         category: taskscheduler
   - id: cs_task_failed_logon_eventtype
     type: add_condition
     conditions:
-      sourcetype: "UserLogonFailed2V*"
+      sourcetype: "UserLogonFailed2v*"
     rule_conditions:
       - type: logsource
         category: failed_logon
@@ -244,9 +244,9 @@ transformations:
     type: add_condition
     conditions:
       sourcetype:
-        - "AsepValueUpdateV*"
-        - "RegSystemConfigValueUpdateV*"
-        - "RegGenericValueUpdateV*"
+        - "AsepValueUpdatev*"
+        - "RegSystemConfigValueUpdatev*"
+        - "RegGenericValueUpdatev*"
       RegOperationType: 1
     rule_conditions:
       - type: logsource
@@ -256,9 +256,9 @@ transformations:
     type: add_condition
     conditions:
       sourcetype:
-        - "AsepValueUpdateV*"
-        - "RegSystemConfigValueUpdateV*"
-        - "RegGenericValueUpdateV*"
+        - "AsepValueUpdatev*"
+        - "RegSystemConfigValueUpdatev*"
+        - "RegGenericValueUpdatev*"
       RegOperationType: 1
     rule_conditions:
       - type: logsource
@@ -267,7 +267,7 @@ transformations:
   - id: cs_dns_query_eventtype
     type: add_condition
     conditions:
-      sourcetype: "DnsRequestV*"
+      sourcetype: "DnsRequestv*"
     rule_conditions:
       - type: logsource
         product: windows
@@ -275,7 +275,7 @@ transformations:
   - id: cs_network_connection_eventtype
     type: add_condition
     conditions:
-      sourcetype: "NetworkConnectionIP4V*"
+      sourcetype: "NetworkConnectionIP4v*"
     rule_conditions:
       - type: logsource
         category: network_connection
@@ -286,7 +286,7 @@ transformations:
   - id: cs_network_receive_eventtype
     type: add_condition
     conditions:
-      sourcetype: "NetworkReceiveAcceptIP4V*"
+      sourcetype: "NetworkReceiveAcceptIP4v*"
     rule_conditions:
       - type: logsource
         category: network_connection
@@ -298,14 +298,14 @@ transformations:
   - id: cs_wmi_eventtype
     type: add_condition
     conditions:
-      sourcetype: "WmiCreateProcessV*"
+      sourcetype: "WmiCreateProcessv*"
     rule_conditions:
       - type: logsource
         category: wmi_event
   - id: cs_image_load_eventtype
     type: add_condition
     conditions:
-      sourcetype: "ClassifiedModuleLoadV*"
+      sourcetype: "ClassifiedModuleLoadv*"
     rule_conditions:
       - type: logsource
         category: image_load
@@ -313,7 +313,7 @@ transformations:
   - id: cs_file_access_eventtype
     type: add_condition
     conditions:
-      sourcetype: "FileOpenInfoV*"
+      sourcetype: "FileOpenInfov*"
     rule_conditions:
       - type: logsource
         category: file_open
@@ -321,7 +321,7 @@ transformations:
   - id: cs_file_delete_eventtype
     type: add_condition
     conditions:
-      sourcetype: "FileDeleteInfoV*"
+      sourcetype: "FileDeleteInfov*"
     rule_conditions:
       - type: logsource
         category: file_delete
@@ -329,7 +329,7 @@ transformations:
   - id: cs_file_create_eventtype
     type: add_condition
     conditions:
-      sourcetype: "*FileWrittenV*"
+      sourcetype: "*FileWrittenv*"
     rule_conditions:
       - type: logsource
         category: file_event
@@ -337,7 +337,7 @@ transformations:
   - id: cs_file_rename_eventtype
     type: add_condition
     conditions:
-      sourcetype: "*FileWrittenV*"
+      sourcetype: "*FileWrittenv*"
     rule_conditions:
       - type: logsource
         category: file_rename
