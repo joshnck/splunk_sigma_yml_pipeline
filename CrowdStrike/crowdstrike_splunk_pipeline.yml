@@ -1,93 +1,15 @@
+####
+# Splunk Savedsearches.conf Transformation Pipeline for CrowdStrike Data
+# Currently only supports Windows logs
+#
+# USAGE: Modify the crowdstrike_index transformation below to match your internal index and then run:
+# sigma convert -p crowdstrike_splunk_pipeline.yml -t splunk "sigma\rules\windows\" -o savedsearches.conf -s
+# 
+# todo: add support for Linux
+####
 name: crowdstrike
 priority: 10
 transformations:
-
-## Droping logsources not supported in CrowdStrike
-  - id: cs_drop_unsupported_logsource_sysmon_status
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: sysmon_status
-  - id: cs_drop_unsupported_logsource_raw_access_thread
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: raw_access_thread
-  - id: cs_drop_unsupported_logsource_process_tampering
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: process_tampering
-  - id: cs_drop_unsupported_logsource_process_access
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: process_access
-  - id: cs_drop_unsupported_logsource_ps_classic_start
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: ps_classic_start
-  - id: cs_drop_unsupported_logsource_ps_module
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: ps_module
-  - id: cs_drop_unsupported_logsource_ps_script
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: ps_script
-  - id: cs_drop_unsupported_logsource_pipe_created
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: pipe_created
-  - id: cs_drop_unsupported_logsource_driver_load
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: driver_load
-  - id: cs_drop_unsupported_logsource_create_stream_hash
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: create_stream_hash
-  - id: cs_drop_unsupported_logsource_create_remote_thread
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: create_remote_thread
-  - id: cs_drop_unsupported_logsource_application
-    type: rule_failure
-    message: CrowdStrike logs do not support this log source at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        service: application
-
 
 #### INDEX AND OS ASSIGNMENTS
   - id: crowdstrike_index
@@ -98,8 +20,92 @@ transformations:
       - type: logsource
         product: windows
 
-#### FIELDNAME MAPPINGS
-## This reads top to bottom - so specific mappings are on top and generic mappings are on bottom
+## Droping logsources not supported in CrowdStrike
+  - id: cs_drop_unsupported_logsource_sysmon_status
+    type: rule_failure
+    message: CrowdStrike logs do not support sysmon_status logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: sysmon_status
+  - id: cs_drop_unsupported_logsource_raw_access_thread
+    type: rule_failure
+    message: CrowdStrike logs do not support raw_access_thread logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: raw_access_thread
+  - id: cs_drop_unsupported_logsource_process_tampering
+    type: rule_failure
+    message: CrowdStrike logs do not support process_tampering logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: process_tampering
+  - id: cs_drop_unsupported_logsource_process_access
+    type: rule_failure
+    message: CrowdStrike logs do not support process_access logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: process_access
+  - id: cs_drop_unsupported_logsource_ps_classic_start
+    type: rule_failure
+    message: CrowdStrike logs do not support ps_classic_start logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: ps_classic_start
+  - id: cs_drop_unsupported_logsource_ps_module
+    type: rule_failure
+    message: CrowdStrike logs do not support ps_module logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: ps_module
+  - id: cs_drop_unsupported_logsource_ps_script
+    type: rule_failure
+    message: CrowdStrike logs do not support ps_script logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: ps_script
+  - id: cs_drop_unsupported_logsource_pipe_created
+    type: rule_failure
+    message: CrowdStrike logs do not support pipe_created logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: pipe_created
+  - id: cs_drop_unsupported_logsource_driver_load
+    type: rule_failure
+    message: CrowdStrike logs do not support driver_load logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: driver_load
+  - id: cs_drop_unsupported_logsource_create_stream_hash
+    type: rule_failure
+    message: CrowdStrike logs do not support create_stream_hash logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: create_stream_hash
+  - id: cs_drop_unsupported_logsource_create_remote_thread
+    type: rule_failure
+    message: CrowdStrike logs do not support create_remote_thread logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: create_remote_thread
+  - id: cs_drop_unsupported_logsource_application
+    type: rule_failure
+    message: CrowdStrike logs do not support application logs at this time.
+    rule_conditions:
+      - type: logsource
+        product: windows
+        service: application
+## Drop all rules with the EventID field to handle all other rules in the /builtin folder
   - id: cs_drop_eventid
     type: detection_item_failure
     message: CrowdStrike logs do not support the field EventID at this time.
@@ -107,10 +113,12 @@ transformations:
       - type: include_fields
         fields:
           - EventID
+
+#### FIELDNAME MAPPINGS
+## This reads top to bottom - so specific mappings and overwrites are on top and generic mappings are on bottom
     rule_conditions:
       - type: logsource
         product: windows
-  # Registry Add field mappings
   - id: cs_reg_add_fieldmapping
     type: field_name_mapping
     mapping:
@@ -119,7 +127,6 @@ transformations:
       - type: logsource
         product: windows
         category: registry_add
-  # Registry Set field mappings (AFAIK there is no OR function for reg_set OR reg_add but it maybe accepts a list?)
   - id: cs_reg_add_fieldmapping
     type: field_name_mapping
     mapping:
@@ -260,7 +267,7 @@ transformations:
   - id: cs_dns_query_eventtype
     type: add_condition
     conditions:
-      sourcetype: "DnsRequest*"
+      sourcetype: "DnsRequestV*"
     rule_conditions:
       - type: logsource
         product: windows
@@ -364,7 +371,6 @@ transformations:
 
   #### FIELD MODIFICATIONS
   # Remove the EventType: CreateKey field as it isn't used in CrowdStrike logs
-  # not sure if this one is correct in yaml
   - id: cs_reg_add_field_removal
     type: drop_detection_item
     rule_conditions:
