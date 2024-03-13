@@ -381,20 +381,10 @@ transformations:
       - type: include_fields
         fields: "EventType"
   #  Regex cleaning
-  - id: cs_parentbasefilename_mod_imagefilename
+  - id: cs_parentbasefilename_mod_imagefilename # This is only necessary if the JSON logs are not cleaned at ingestion time.
     type: replace_string
     regex: "\\\\"
-    replacement: "\\\\\\\\\\\\"
-    rule_conditions:
-      - type: logsource
-        product: windows
-    field_name_conditions:
-      - type: include_fields
-        fields: "ImageFileName"
-  - id: cs_parentbasefilename_mod_imagefilename
-    type: replace_string
-    regex: "\\\\"
-    replacement: "\\\\\\\\\\\\"
+    replacement: "\\\\\\\\"
     rule_conditions:
       - type: logsource
         product: windows
