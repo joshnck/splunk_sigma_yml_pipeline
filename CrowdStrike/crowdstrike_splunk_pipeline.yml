@@ -113,12 +113,11 @@ transformations:
       - type: include_fields
         fields:
           - EventID
-
-#### FIELDNAME MAPPINGS
-## This reads top to bottom - so specific mappings and overwrites are on top and generic mappings are on bottom
     rule_conditions:
       - type: logsource
         product: windows
+#### FIELDNAME MAPPINGS
+## This reads top to bottom - so specific mappings and overwrites are on top and generic mappings are on bottom
   - id: cs_reg_add_fieldmapping
     type: field_name_mapping
     mapping:
