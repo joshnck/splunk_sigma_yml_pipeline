@@ -330,7 +330,7 @@ transformations:
   - id: cs_file_create_eventtype
     type: add_condition
     conditions:
-      sourcetype: "*FileWrittenv*"
+      sourcetype: "*Writtenv*"
     rule_conditions:
       - type: logsource
         category: file_event
@@ -338,7 +338,7 @@ transformations:
   - id: cs_file_rename_eventtype
     type: add_condition
     conditions:
-      sourcetype: "*FileWrittenv*"
+      sourcetype: "*Writtenv*"
     rule_conditions:
       - type: logsource
         category: file_rename
