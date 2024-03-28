@@ -364,6 +364,7 @@ transformations:
       ProcessId: RawProcessId
       FileName: TargetFileName
       SourceFilename: OriginalFilename
+      OriginalFileName: OriginalFilename
       User: UserSid
     rule_conditions:
       - type: logsource
