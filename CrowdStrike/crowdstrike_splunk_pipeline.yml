@@ -77,13 +77,6 @@ transformations:
       - type: logsource
         product: windows
         category: pipe_created
-  - id: cs_drop_unsupported_logsource_driver_load
-    type: rule_failure
-    message: CrowdStrike logs do not support driver_load logs at this time.
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: driver_load
   - id: cs_drop_unsupported_logsource_create_stream_hash
     type: rule_failure
     message: CrowdStrike logs do not support create_stream_hash logs at this time.
@@ -215,6 +208,7 @@ transformations:
         category: file_event
 
 
+
 #### LOGSOURCE TO SOURCETYPE CONVERSIONS
 ## This is faster than using event_simpleName due to sourcetype being accelerated
  # Sourcetype conversions
@@ -343,6 +337,14 @@ transformations:
       - type: logsource
         category: file_rename
         product: windows
+  - id: cs_driver_load_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "*DriverLoad*"
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: driver_load
 
 
 # Generic Fieldname Mapping for all log sources
@@ -382,17 +384,6 @@ transformations:
     field_name_conditions:
       - type: include_fields
         fields: "EventType"
-  #  Regex cleaning
-  - id: cs_parentbasefilename_mod_imagefilename # This is only necessary if the JSON logs are not cleaned at ingestion time.
-    type: replace_string
-    regex: "\\\\"
-    replacement: "\\\\\\\\"
-    rule_conditions:
-      - type: logsource
-        product: windows
-    field_name_conditions:
-      - type: include_fields
-        fields: "ImageFileName"
   # Extracting file names from whole paths
   - id: cs_parentbasefilename_replace_path_by_filename
     type: replace_string
