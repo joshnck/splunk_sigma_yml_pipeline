@@ -270,7 +270,7 @@ transformations:
   - id: cs_network_connection_eventtype
     type: add_condition
     conditions:
-      sourcetype: "NetworkConnectionIP4v*"
+      sourcetype: "NetworkConnectIP4v*"
     rule_conditions:
       - type: logsource
         category: network_connection
