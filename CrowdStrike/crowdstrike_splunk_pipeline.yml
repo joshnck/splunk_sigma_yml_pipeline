@@ -404,16 +404,16 @@ transformations:
     field_name_conditions:
       - type: include_fields
         fields: "ParentBaseFileName"
-  # This field is no longer needed at is only for sourcetype mapping
-  - id: cs_reg_add_field_removal
-    type: drop_detection_item
-    rule_conditions:
-      - type: logsource
-        product: windows
-        category: network_connection
-    field_name_conditions:
-      - type: include_fields
-        fields: "Initiated"
+  # # This field is no longer needed at is only for sourcetype mapping (NEEDS TO BE REPLACED WITH REMOVE_FIELD WHEN WORKING
+  # - id: cs_reg_add_field_removal
+  #   type: drop_detection_item
+  #   rule_conditions:
+  #     - type: logsource
+  #       product: windows
+  #       category: network_connection
+  #   field_name_conditions:
+  #     - type: include_fields
+  #       fields: "Initiated"
 
 postprocessing:
 - type: template
