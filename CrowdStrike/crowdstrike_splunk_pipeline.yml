@@ -275,21 +275,20 @@ transformations:
       - type: logsource
         category: network_connection
         product: windows
-    field_name_conditions:
-      - type: include_fields
-        fields: "Initiated"
-  # - id: cs_network_receive_eventtype ### This isn't working right now - keeping commented until a better solution is available
-  #   type: add_condition
-  #   conditions:
-  #     sourcetype: "NetworkReceiveAcceptIP4v*"
-  #   rule_conditions:
-  #     - type: logsource
-  #       category: network_connection
-  #       product: windows
-  #   field_name_conditions:
-  #     - type: include_fields
-  #       fields: "Initiated"
-  #   field_name_cond_not: True 
+      - type: contains_detection_item
+        field: "Initiated"
+        value: "true"
+  - id: cs_network_receive_eventtype
+    type: add_condition
+    conditions:
+      sourcetype: "NetworkReceiveAcceptIP4v*"
+    rule_conditions:
+      - type: logsource
+        category: network_connection
+        product: windows
+      - type: contains_detection_item
+        field: "Initiated"
+        value: "false"
   - id: cs_wmi_eventtype
     type: add_condition
     conditions:
@@ -404,16 +403,16 @@ transformations:
     field_name_conditions:
       - type: include_fields
         fields: "ParentBaseFileName"
-  # # This field is no longer needed at is only for sourcetype mapping (NEEDS TO BE REPLACED WITH REMOVE_FIELD WHEN WORKING
-  # - id: cs_reg_add_field_removal
-  #   type: drop_detection_item
-  #   rule_conditions:
-  #     - type: logsource
-  #       product: windows
-  #       category: network_connection
-  #   field_name_conditions:
-  #     - type: include_fields
-  #       fields: "Initiated"
+  # This field is no longer needed at is only for sourcetype mapping (NEEDS TO BE REPLACED WITH REMOVE_FIELD WHEN WORKING
+  - id: cs_reg_add_field_removal
+    type: drop_detection_item
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: network_connection
+    field_name_conditions:
+      - type: include_fields
+        fields: "Initiated"
 
 postprocessing:
 - type: template
