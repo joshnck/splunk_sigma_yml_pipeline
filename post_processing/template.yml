@@ -1,0 +1,7 @@
+postprocessing:
+- type: template
+  template: |+
+    [{{ rule.title }}]
+    {% for item in rule.custom_attributes.meta %}{{item}}: {{rule.custom_attributes.meta[item] | replace("\"","'")}}{% if not loop.last %},
+    {% endif %}{% endfor %}
+    }
