@@ -35,7 +35,6 @@ detection:
             - '.jar'
             - '.pl'
             - '.inf'
-    timeframe: 1h
     condition: all of selection_*
 falsepositives: 
     - Unknown
