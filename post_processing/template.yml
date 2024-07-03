@@ -3,5 +3,5 @@ postprocessing:
   template: |+
     [{{ rule.title }}]
     search = {{ query }} | eval rule="{{ rule.id }}", title="{{ rule.title }}" | collect index=notable_events addinfo=True source="{{ rule.id }}"
-    {% for item in rule.custom_attributes.meta %}{{item}}= {{rule.custom_attributes.meta[item] | replace("\"","'")}}{% if not loop.last %}
+    {% for item in rule.custom_attributes.meta %}{{item}} = {{rule.custom_attributes.meta[item]}}{% if not loop.last %}
     {% endif %}{% endfor %}
