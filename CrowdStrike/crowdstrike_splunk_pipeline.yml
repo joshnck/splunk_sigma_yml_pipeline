@@ -403,6 +403,27 @@ transformations:
     field_name_conditions:
       - type: include_fields
         fields: "ParentBaseFileName"
+  # Transform disk name from C:\ to \Device\HarddiskVolume?\ and then remove the colon from ImageFileName
+  - id: cs_replace_disk_name
+    type: replace_string
+    regex: "^[C-Z]:"
+    replacement: "\\\\Device\\\\HarddiskVolume?\\\\"
+    rule_conditions:
+      - type: logsource
+        product: windows
+    field_name_conditions:
+      - type: include_fields
+        fields: "ImageFileName"
+  - id: cs_remove_colon_disk_name
+    type: replace_string
+    regex: ":"
+    replacement: ""
+    rule_conditions:
+      - type: logsource
+        product: windows
+    field_name_conditions:
+      - type: include_fields
+        fields: "ImageFileName"
   # This field is no longer needed at is only for sourcetype mapping (NEEDS TO BE REPLACED WITH REMOVE_FIELD WHEN WORKING
   - id: cs_reg_add_field_removal
     type: drop_detection_item
