@@ -189,7 +189,7 @@ transformations:
         category: wmi_event
   # This mapping is not a 1:1 with sysmon because CrowdStrike will filter what for only what they call an important image
   # There is likely to be a lot of overlap in detections with this mapping.
-  - id: cs_image_loaded_fieldmapping
+  - id: cs_image_load_fieldmapping
     type: field_name_mapping
     mapping:
       Image: TargetImageFileName
@@ -197,7 +197,7 @@ transformations:
     rule_conditions:
       - type: logsource
         product: windows
-        category: image_loaded
+        category: image_load
   - id: cs_file_event_fieldmapping
     type: field_name_mapping
     mapping:
