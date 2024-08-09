@@ -221,6 +221,7 @@ transformations:
     rule_conditions:
       - type: logsource
         category: process_creation
+        product: windows
   - id: cs_task_scheduler_eventtype
     type: add_condition
     conditions:
@@ -228,6 +229,7 @@ transformations:
     rule_conditions:
       - type: logsource
         category: taskscheduler
+        product: windows
   - id: cs_task_failed_logon_eventtype
     type: add_condition
     conditions:
@@ -235,6 +237,7 @@ transformations:
     rule_conditions:
       - type: logsource
         category: failed_logon
+        product: windows
   - id: cs_reg_add_eventtype
     type: add_condition
     conditions:
@@ -296,6 +299,7 @@ transformations:
     rule_conditions:
       - type: logsource
         category: wmi_event
+        product: windows
   - id: cs_image_load_eventtype
     type: add_condition
     conditions:
@@ -435,6 +439,8 @@ transformations:
       - type: include_fields
         fields: "Initiated"
 
+
+## IN PRODUCTION, DO NOT INCLUDE POSTPROCESSING IN THIS PIPELINE FILE. BEST PRACTICE IS TO HAVE IT IN A SEPERATE FILE
 postprocessing:
 - type: template
   template: |+
