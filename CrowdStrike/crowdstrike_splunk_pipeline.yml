@@ -377,6 +377,8 @@ transformations:
         
 
   #### FIELD MODIFICATIONS
+  ## Note: Regex fields depend heavily on how you ingest your logs from CrowdStrike. In my case I don't strip the extra \ at write time, others do.
+  ## Keep that in mind as you use my regexes because things like \\\\Device\\\\... may just be \\Device\\ in your logs
   # Remove the EventType: CreateKey field as it isn't used in CrowdStrike logs
   - id: cs_reg_add_field_removal
     type: drop_detection_item
