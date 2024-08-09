@@ -1,0 +1,1 @@
+This maps eventID to sourcetypes from default configuration of sysmon to improve search performance in Splunk
