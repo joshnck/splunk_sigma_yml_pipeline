@@ -389,16 +389,6 @@ transformations:
     field_name_conditions:
       - type: include_fields
         fields: "EventType"
-  # Extracting file names from whole paths
-  - id: cs_parentbasefilename_replace_path_by_filename
-    type: replace_string
-    # changed \* to \\* as python throws errors
-    regex: "^(\\*)?(?:[^\\\\|\/])?.+(?=\\\\|\/)(?:\\\\|\/)(.*)$"
-    replacement: "\\2"
-    rule_conditions:
-      - type: logsource
-        category: dns_query
-        product: windows
   - id: cs_parentbasefilename_executable_only
     type: replace_string
     regex: "^\\*\\\\([^\\\\]+)$"
