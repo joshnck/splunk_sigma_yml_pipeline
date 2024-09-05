@@ -51,7 +51,7 @@ tags:
     - attack.execution
 meta:
     action.notable.param.security_domain: endpoint
-    cron_schedule: '*/15 * * * *'
+    cron_schedule: '*/30 * * * *'
     action.notable: 1
     alert.suppress: 1
     alert.suppress.fields: host,CommandLine
